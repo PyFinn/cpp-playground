@@ -21,4 +21,16 @@ int main() {
         }
         
     }
+    //Pop from vector (Last element)
+    v1.pop_back();
+    int counter = 0;
+    for (int i : v1)
+    {
+        cout << i << "\n";
+        counter++;
+        if ((i != 4 )&& counter == v1.size())
+        {
+            cout << "Successfully popped an element" << "\n";
+        }
+    }
 }
