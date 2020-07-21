@@ -10,6 +10,8 @@ using std::ifstream;
 using std::string;
 using std::istringstream;
 
+enum class State {kEmpty, kObstacle};
+
 vector<int> ParseLine(string toParse) {
     vector<int> vctr;
     istringstream stream1(toParse);
@@ -35,6 +37,20 @@ vector<vector<int>> ReadBoardFile(string path_to_file) {
         }
     }
     return resultVector;
+}
+
+string CellString(State characterState) {
+    switch (characterState)
+    {
+    case State::kEmpty:
+        return "0 ";
+        break;
+    case State::kObstacle:
+        return "⛰️ ";
+        break;
+    default:
+        break;
+    }
 }
 
 void PrintBoard(vector<vector<int>> v1) {
