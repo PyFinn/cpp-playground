@@ -70,5 +70,5 @@ void PrintBoard(vector<vector<State>> v1) {
     }
 }
 int main() {
-    PrintBoard(ReadBoardFile("file_to_read/1.board"));
+    PrintBoard(ReadBoardFile("cpp_fundamentals/file_to_read/1.board"));
 }
