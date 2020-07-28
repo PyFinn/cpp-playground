@@ -60,6 +60,15 @@ string CellString(State characterState) {
     }
 }
 
+bool compare(vector<int> &v1, vector<int> &v2) {
+    if (v1[2] + v1[3] > v2[2] + v2[3])
+    {
+        return true;
+    }
+    return false;
+    
+}
+
 int Heuristic(int x1, int x2, int y1, int y2) {
     return abs(x2 - x1) + abs(y2 - y1);
 }
