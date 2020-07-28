@@ -10,7 +10,7 @@ using std::ifstream;
 using std::string;
 using std::istringstream;
 
-enum class State {kEmpty, kObstacle};
+enum class State {kEmpty, kObstacle, kClosed};
 
 vector<State> ParseLine(string toParse) {
     vector<State> vctr;
@@ -68,6 +68,12 @@ vector<vector<State>> Search(vector<vector<State>> grid, int initialPoint[2], in
 
 int Heuristic(int x1, int x2, int y1, int y2) {
     return abs(x2 - x1) + abs(y2 - y1);
+}
+
+void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openNodes, vector<vector<State>> &board) {
+    vector<int> node{x,y,g,h};
+    openNodes.push_back(node);
+    board[x][y] = State::kClosed;
 }
 
 void PrintBoard(vector<vector<State>> v1) {
