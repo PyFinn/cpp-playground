@@ -110,6 +110,18 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
     return vector<vector<State>>{};
 }
 
+bool checkValidCell(int x, int y, vector<vector<State>> &grid) {
+    if (x>= 0 && x < grid.size() && y >= 0 && y < grid.size())
+    {
+        if (grid[x][y] == State::kEmpty)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+}
+
 void PrintBoard(vector<vector<State>> v1) {
     for(vector<State> v : v1) {
         for (int i = 0; i < v.size(); i++)
