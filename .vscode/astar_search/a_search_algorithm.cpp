@@ -66,6 +66,10 @@ vector<vector<State>> Search(vector<vector<State>> grid, int initialPoint[2], in
     return vector<vector<State>> {};
 }
 
+int Heuristic(int x1, int x2, int y1, int y2) {
+    return abs(x2 - x1) + abs(y2 - y1);
+}
+
 void PrintBoard(vector<vector<State>> v1) {
     for(vector<State> v : v1) {
         for (int i = 0; i < v.size(); i++)
@@ -75,6 +79,7 @@ void PrintBoard(vector<vector<State>> v1) {
         cout << "\n";
     }
 }
+
 int main() {
     auto board = ReadBoardFile("cpp_fundamentals/file_to_read/1.board");
     int startPoint[2] = {0 , 0};
