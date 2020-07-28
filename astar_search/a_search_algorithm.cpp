@@ -60,12 +60,6 @@ string CellString(State characterState) {
     }
 }
 
-vector<vector<State>> Search(vector<vector<State>> grid, int initialPoint[2], int goal_point[2]) {
-    cout << "No path found" << "\n";
-
-    return vector<vector<State>> {};
-}
-
 int Heuristic(int x1, int x2, int y1, int y2) {
     return abs(x2 - x1) + abs(y2 - y1);
 }
@@ -74,6 +68,13 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openNodes, vecto
     vector<int> node{x,y,g,h};
     openNodes.push_back(node);
     board[x][y] = State::kClosed;
+}
+
+vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2]){
+    vector<vector<int>> open {};
+
+    AddToOpen(init[0], init[1], 0, Heuristic(init[0], goal[0], init[1], goal[1]), open, grid);
+    return vector<vector<State>>{};
 }
 
 void PrintBoard(vector<vector<State>> v1) {
