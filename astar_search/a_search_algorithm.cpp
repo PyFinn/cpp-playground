@@ -57,6 +57,9 @@ string CellString(State characterState) {
     case State::kObstacle:
         return "⛰️ ";
         break;
+    case State::kPath:
+        return "🚗 ";
+        break;
     default:
         return "0 ";
         break;
@@ -86,12 +89,47 @@ void AddToOpen(int x, int y, int g, int h, vector<vector<int>> &openNodes, vecto
     board[x][y] = State::kClosed;
 }
 
+bool checkValidCell(int x, int y, vector<vector<State>> &grid) {
+    bool on_grid_x = (x >= 0 && x < grid.size());
+    bool on_grid_y = (y >= 0 && y < grid[0].size());
+    if (on_grid_x && on_grid_y)
+        return grid[x][y] == State::kEmpty;//return T or F
+    return false;
+}
+
+void ExpandNeighbors(vector<int> &node, vector<vector<int>> &open_vector, vector<vector<State>> &grid, int *goal) {
+    //Get current nodes data
+    int nodeX = node[0];
+    int nodeY = node[1];
+    int nodeG = node[2];
+    int nodeH = node[3];
+    int nextG = nodeG + 1;
+    cout << __func__ << ", " << nodeX << ", " << nodeY << "\n";
+
+    for (int i = 0; i < 4; i++)
+    {
+        int nextX = nodeX + delta[i][0];
+        int nextY = nodeY + delta[i][1];
+
+        bool valid = checkValidCell(nextX, nextY, grid);
+        if (valid)
+        {
+            int nextH = Heuristic(nextX, goal[0], nextY, goal[1]);
+            AddToOpen(nextX, nextY, nextG, nextH, open_vector, grid);
+            cout << nextX << ", " << nextY << "\n";
+        }
+    }
+    
+    }
+
 vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2]){
     vector<vector<int>> open {};
 
     AddToOpen(init[0], init[1], 0, Heuristic(init[0], goal[0], init[1], goal[1]), open, grid);
 
-    while (!open.empty())
+    cout << open.size() << "\n";
+
+    while (open.size() > 0)
     {
         CellSort(&open);
         vector<int> lowestFNode = open.back();
@@ -105,46 +143,12 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
         {
             return grid;
         }
-        
+        ExpandNeighbors(lowestFNode, open, grid, goal);
     }
     
-    return vector<vector<State>>{};
+    cout << "No path found!" << "\n";
+    return std::vector<vector<State>>{};
 }
-
-bool checkValidCell(int x, int y, vector<vector<State>> &grid) {
-    if (x>= 0 && x < grid.size() && y >= 0 && y < grid.size())
-    {
-        if (grid[x][y] == State::kEmpty)
-        {
-            return true;
-        }
-        return false;
-    }
-    
-}
-
-void ExpandNeighbors(vector<int> &node, vector<vector<int>> &open_vector, vector<vector<State>> &grid, int *goal) {
-    //Get current nodes data
-    int nodeX = node[0];
-    int nodeY = node[1];
-    int nodeG = node[2];
-    int nodeH = node[3];
-
-    for (int i = 0; i < 4; i++)
-    {
-        int nextX = delta[i][0];
-        int nextY = delta[i][1];
-
-        bool valid = checkValidCell(nextX, nextY, grid);
-        if (valid)
-        {
-            nodeG++;
-            int nextH = Heuristic(nextX, goal[0], nextY, goal[1]);
-            AddToOpen(nextX, nextY, nodeG, nextH, open_vector, grid);
-        }
-    }
-    
-    }
 
 void PrintBoard(vector<vector<State>> v1) {
     for(vector<State> v : v1) {
@@ -159,7 +163,7 @@ void PrintBoard(vector<vector<State>> v1) {
 int main() {
     auto board = ReadBoardFile("cpp_fundamentals/file_to_read/1.board");
     int startPoint[2] = {0 , 0};
-    int endPoint[2] = {4 , 4};
+    int endPoint[2] = {4 , 5};
     vector<vector<State>> solution = Search(board, startPoint, endPoint);
     PrintBoard(solution);
 }
