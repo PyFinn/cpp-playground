@@ -13,6 +13,7 @@ using std::istringstream;
 using std::sort;
 
 enum class State {kEmpty, kObstacle, kClosed, kPath};
+const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
 vector<State> ParseLine(string toParse) {
     vector<State> vctr;
@@ -121,6 +122,29 @@ bool checkValidCell(int x, int y, vector<vector<State>> &grid) {
     }
     
 }
+
+void ExpandNeighbors(vector<int> &node, vector<vector<int>> &open_vector, vector<vector<State>> &grid, int *goal) {
+    //Get current nodes data
+    int nodeX = node[0];
+    int nodeY = node[1];
+    int nodeG = node[2];
+    int nodeH = node[3];
+
+    for (int i = 0; i < 4; i++)
+    {
+        int nextX = delta[i][0];
+        int nextY = delta[i][1];
+
+        bool valid = checkValidCell(nextX, nextY, grid);
+        if (valid)
+        {
+            nodeG++;
+            int nextH = Heuristic(nextX, goal[0], nextY, goal[1]);
+            AddToOpen(nextX, nextY, nodeG, nextH, open_vector, grid);
+        }
+    }
+    
+    }
 
 void PrintBoard(vector<vector<State>> v1) {
     for(vector<State> v : v1) {
