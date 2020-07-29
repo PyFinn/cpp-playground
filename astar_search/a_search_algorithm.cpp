@@ -12,7 +12,7 @@ using std::string;
 using std::istringstream;
 using std::sort;
 
-enum class State {kEmpty, kObstacle, kClosed, kPath};
+enum class State {kEmpty, kObstacle, kClosed, kPath, kStart, kFinish};
 const int delta[4][2]{{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
 vector<State> ParseLine(string toParse) {
@@ -59,6 +59,12 @@ string CellString(State characterState) {
         break;
     case State::kPath:
         return "🚗 ";
+        break;
+    case State::kFinish:
+        return "🚦 ";
+        break;
+    case State::kStart:
+        return "🏁 ";
         break;
     default:
         return "0 ";
@@ -138,9 +144,15 @@ vector<vector<State>> Search(vector<vector<State>> grid, int init[2], int goal[2
         int x = lowestFNode[0];
         int y = lowestFNode[1];
         grid[x][y] = State::kPath;
+        if (x == init[0] && y == init[1])
+        {
+            grid[x][y] = State::kStart;
+        }
+        
 
         if (x == goal[0] && y == goal[1])
         {
+            grid[x][y] = State::kFinish;
             return grid;
         }
         ExpandNeighbors(lowestFNode, open, grid, goal);
