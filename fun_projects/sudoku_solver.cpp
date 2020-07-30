@@ -3,7 +3,7 @@
 using std::cout;
 using std::vector;
 
-bool columnOk(vector<vector<int>> grid, int numToTry, int index) {
+bool rowOk(vector<vector<int>> &grid, int numToTry, int index) {
     for (int i = 0; i < grid[index].size(); i++)
     {
         if (numToTry == abs(grid[index][i]))
@@ -14,7 +14,7 @@ bool columnOk(vector<vector<int>> grid, int numToTry, int index) {
     return true;
 }
 
-bool rowOk(vector<vector<int>> grid, int numToTry, int index) {
+bool columnOk(vector<vector<int>> &grid, int numToTry, int index) {
     for (int i = 0; i < grid.size(); i++)
     {
         if (numToTry == abs(grid[i][index]))
@@ -25,9 +25,9 @@ bool rowOk(vector<vector<int>> grid, int numToTry, int index) {
     return true;
 }
 
-bool blockOk(vector<vector<int>> grid, int numToTry, int indexColumn, int indexRow) {
-    int startX = (indexColumn/3) * 3;
-    int startY = (indexRow / 3) * 3;
+bool blockOk(vector<vector<int>> &grid, int numToTry, int indexColumn, int indexRow) {
+    int startX = (indexRow / 3) * 3;
+    int startY = (indexColumn/3) * 3;
     for (int i = startX; i < startX + 3; i++)
     {
         for (int a = startY; a < startY + 3; a++)
@@ -41,6 +41,77 @@ bool blockOk(vector<vector<int>> grid, int numToTry, int indexColumn, int indexR
     return true;
 }
 
-int main() {
+void solveSudoku(vector<vector<int>> &grid) {
+    int position = 0;
+    while (position < 81)
+    {        
+        int actualRow = position / 9;
+        int actualColumn = position % 9;
 
+        if (grid[actualRow][actualColumn] < 0)
+        {
+            position++;
+        }
+        else
+        {
+            int numToTry = grid[actualRow][actualColumn] + 1;
+            bool foundNumber = false;
+            while (!foundNumber)
+            {
+                bool columnCheck = columnOk(grid, numToTry, actualColumn);
+                bool rowCheck = rowOk(grid, numToTry, actualRow);
+                bool blockCheck = blockOk(grid, numToTry, actualColumn, actualRow);
+                if (columnCheck && rowCheck && blockCheck)
+                {
+                    foundNumber = true;
+                } else
+                {
+                    numToTry++;
+                }
+                
+                
+            }
+            if (numToTry < 10)
+            {
+                grid[actualRow][actualColumn] = numToTry;
+                position++;
+            } else
+            {
+                grid[actualRow][actualColumn] = 0;
+                do
+                {
+                    position--;
+                } while (grid[position / 9][position % 9] < 0);
+            }
+        }
+    }
+    
+}
+
+void printSudoku(vector<vector<int>> grid) {
+    for (vector<int> v : grid)
+    {
+        for (int i : v)
+        {
+            cout << i << ", ";
+        }
+        cout << "\n";
+    }
+    
+}
+
+int main() {
+    vector<vector<int>> sudoku = {
+        { 0,  0, -5,  0,  0,  0,  0, -6,  0},
+        { 0,  0, -8, -7,  0,  0,  0,  0,  0},
+        { 0,  0,  0,  0, -3,  0,  0,  0, -9},
+        { 0,  0,  0,  0,  0, -6,  0,  0,  0},
+        { 0,  0, -3,  0,  0,  0,  0,  0, -7},
+        { 0,  0,  0, -5,  0,  0,  0, -4,  0},
+        { 0, -9,  0,  0,  0, -1,  0,  0,  0},
+        { 0, -6,  0,  0,  0,  0, -7,  0,  0},
+        { 0,  0,  0,  0,  0, -5,  0,  0, -8}
+    };
+    solveSudoku(sudoku);
+    printSudoku(sudoku);
 }
