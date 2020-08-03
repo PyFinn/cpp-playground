@@ -13,7 +13,7 @@ int main() {
 
     i = 5;
     cout << j << "\n";
-    
+
     j = 7;
     cout << j << "\n";
     cout << i << "\n";
