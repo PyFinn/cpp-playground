@@ -11,9 +11,9 @@ class Student {
     public:
         Student(string n, int g, double a);
 
-        string Name() {return name;}
-        int Grade() {return grade;}
-        double Average() {return avg;}
+        const string Name() {return name;}
+        const int Grade() {return grade;}
+        const double Average() {return avg;}
 
         void setName(string n);
         void setGrade(int g);
