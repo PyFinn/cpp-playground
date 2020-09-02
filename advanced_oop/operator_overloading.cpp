@@ -10,6 +10,7 @@ class Matrix {
         int operator() (int row, int column) const {
             values_[row*columns_+column];
         }
+        Matrix operator+(Matrix m) {}
     private:
         int rows_;
         int columns_;
